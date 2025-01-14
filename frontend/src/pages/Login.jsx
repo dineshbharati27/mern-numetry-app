@@ -10,6 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [name, setName ] = useState("")
+  const [firstPassword, setFirstPassword] = useState("")
   const [password, setPassword ] = useState("")
   const [email, setEmail ] = useState("")
 
@@ -17,12 +18,16 @@ const Login = () => {
     event.preventDefault();
     try {
       if (currentState === 'Sign Up') {
-        const response = await axios.post('https://numetry-app-backend.onrender.com/api/user/register',{name, email, password});
-        if (response.data.success) {
-          setToken(response.data.token)
-          localStorage.setItem('token',response.data.token)
+        if (password !== firstPassword) {
+          toast.error("Please enter the right password")
         } else {
-          toast.error(response.data.message)
+          const response = await axios.post('https://numetry-app-backend.onrender.com/api/user/register',{name, email, password});
+          if (response.data.success) {
+            setToken(response.data.token)
+            localStorage.setItem('token',response.data.token)
+          } else {
+            toast.error(response.data.message)
+          }
         }
       } else {
         const response = await axios.post('https://numetry-app-backend.onrender.com/api/user/login',{email, password})
@@ -55,7 +60,12 @@ const Login = () => {
         currentState === 'Login' ? '' : <input onChange={(e)=>setName(e.target.value)} value={name} type="text" className='w-full px-3 py-2 border border-gray-800' placeholder='Name' required/>
       }
       <input onChange={(e)=>setEmail(e.target.value)} value={email} type="email" className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required/>
-      <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required/>
+      {
+        currentState === 'Login' ? '' : <input onChange={(e)=>setFirstPassword(e.target.value)} value={firstPassword} type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Enter Password' required/>
+      }
+      {
+        currentState === 'Login' ? <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required/> : <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Confirm Password' required/>
+      }
 
       <div className='w-full flex justify-between text-sm mt-[-8px]'>
           <p className='cursor-pointer'>Forgot your password?</p>
