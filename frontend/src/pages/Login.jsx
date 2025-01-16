@@ -19,7 +19,7 @@ const Login = () => {
     try {
       if (currentState === 'Sign Up') {
         if (password !== firstPassword) {
-          toast.error("Please enter the right password")
+          toast.error("Password not match")
         } else {
           const response = await axios.post('https://numetry-app-backend.onrender.com/api/user/register',{name, email, password});
           if (response.data.success) {
