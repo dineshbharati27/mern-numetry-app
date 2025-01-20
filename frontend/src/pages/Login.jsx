@@ -30,7 +30,7 @@ const Login = () => {
             formData.append('profileImage', profileImage);
           }
 
-          const response = await axios.post('http://localhost:3001/api/user/register', formData);
+          const response = await axios.post('https://mern-numetry-app.onrender.com/api/user/register', formData);
           if (response.data.success) {
             setToken(response.data.token);
             localStorage.setItem('token', response.data.token);
@@ -39,7 +39,7 @@ const Login = () => {
           }
         }
       } else {
-        const response = await axios.post('http://localhost:3001/api/user/login', { email, password });
+        const response = await axios.post('https://mern-numetry-app.onrender.com/api/user/login', { email, password });
         if(response.data.success){
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);

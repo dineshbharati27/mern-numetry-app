@@ -12,7 +12,7 @@ const Home = () => {
           throw new Error('No token found');
         }
         console.log(token)
-        const { data } = await axios.get('http://localhost:3001/api/user/profile', {
+        const { data } = await axios.get('https://mern-numetry-app.onrender.com/api/user/profile', {
           headers: { token },
         });
 
