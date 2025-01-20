@@ -11,6 +11,7 @@ const createToken = (id) => {
 const registerUser = async (req, res) => {
     try {
         const {name, email, password} =req.body;
+        const profileImage = req.file ? req.file.path : '';
 
         //checking wheather the user already exists or not
         const exists = await userModel.findOne({email});
@@ -34,6 +35,7 @@ const registerUser = async (req, res) => {
             name, 
             email,
             password: hashedPassword,
+            profileImage,
         })
 
         const user = await newUser.save();
@@ -71,5 +73,25 @@ const loginUser = async (req, res) => {
     }
 }
 
-export {registerUser, loginUser}
+// API to get user profile
+const userProfile = async (req, res) => {
+    try {
+
+        const { userId } = req.body
+
+        if (!userId) {
+            return res.status(400).json({ success: false, message: 'User ID is required' });
+        }
+
+        const profileData = await userModel.findById(userId).select('-password')
+
+        res.json({ success: true, profileData })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+export {registerUser, loginUser, userProfile}
 
